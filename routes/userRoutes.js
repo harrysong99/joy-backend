@@ -1,0 +1,114 @@
+// pull required dependencies
+const express = require("express");
+const router = express.Router();
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const keys = require("../config/keys");
+// load input validation
+const validateRegisterInput = require("../controllers/register");
+const validateLoginInput = require("../controllers/login");
+// load user model
+const User = require("../models/userModel");
+
+// pull the erros and isValid variables from our validateRegisterInput(req.body) function and check input validation
+// if valid input, use MongoDB's User.findOne() to see if the user already exists
+// if user is a new user, fill in the fields (name, email, password, serviceTime, driver, location) with data sent in the body of the request
+// use bcrypt.js to hash the password before storing it in your database
+
+// @route POST api/users/register
+// @desc Register user
+// @access Public
+router.post("/register", (req, res) => {
+  // Form validation
+  const { errors, isValid } = validateRegisterInput(req.body);
+  // Check validation
+  if (!isValid) {
+    console.log("unexpected error!: " + errors);
+    return res.status(400).json(errors);
+  }
+  User.findOne({ email: req.body.email }).then((user) => {
+    if (user) {
+      return res.status(400).json({ email: "Email already exists" });
+    } else {
+      const newUser = new User({
+        name: req.body.name,
+        email: req.body.email,
+        password: req.body.password,
+        serviceTime: req.body.serviceTime,
+        driver: req.body.driver,
+        location: req.body.location,
+      });
+      // Hash password before saving in database
+      bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(newUser.password, salt, (err, hash) => {
+          if (err) throw err;
+          newUser.password = hash;
+          newUser
+            .save()
+            .then((user) => res.json(user))
+            .catch((err) => console.log(err));
+        });
+      });
+    }
+  });
+});
+
+// pull the errors and isValid variables from our validateLoginInput(req.body) function and check input validation
+// if valid input, use MongoDB's user.findOne() to see if the user exists
+// if user exists, use bcrypt.js to compare submitted password with hashed password in our database
+// if passwords match, create our JWT Payload
+// sign out jwt, including our payload, keys.secretOrKey from keys.js, and setting a expiresIn time(in seconds)
+// if successful, append the token to a Bearer string
+
+// @route POST api/users/login
+// @desc Login user and return JWT token
+// @access Public
+router.post("/login", (req, res) => {
+  // Form validation
+  const { errors, isValid } = validateLoginInput(req.body);
+  // Check validation
+  if (!isValid) {
+    console.log("unexpected error!: " + errors);
+    return res.status(400).json(errors);
+  }
+  const email = req.body.email;
+  const password = req.body.password;
+  // Find user by email
+  User.findOne({ email }).then((user) => {
+    // Check if user exists
+    if (!user) {
+      return res.status(404).json({ emailnotfound: "Email not found" });
+    }
+    // Check password
+    bcrypt.compare(password, user.password).then((isMatch) => {
+      if (isMatch) {
+        // User matched
+        // Create JWT Payload
+        const payload = {
+          id: user.id,
+          name: user.name,
+        };
+        // Sign token
+        jwt.sign(
+          payload,
+          keys.secretOrKey,
+          {
+            expiresIn: 31556926, // 1 year in seconds
+          },
+          (err, token) => {
+            res.json({
+              success: true,
+              token: "Bearer " + token,
+            });
+          }
+        );
+      } else {
+        return res
+          .status(400)
+          .json({ passwordincorrect: "Password incorrect" });
+      }
+    });
+  });
+});
+
+module.exports = router;

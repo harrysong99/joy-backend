@@ -36,8 +36,8 @@ Response Example
 
 ```
 {
-  "success": true,
-  "token": "Bearer + token..."
+    "success": true,
+    "token": "Bearer + token..."
 }
 ```
 

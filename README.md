@@ -71,3 +71,28 @@ Response Example
     "__v": 0
 }
 ```
+
+| API             | getUser                           |
+| --------------- | --------------------------------- |
+| Url             | `/api/users/:email`               |
+| Method          | Get                               |
+| Params          | email                             |
+| Request Example | curl IP/api/users/example@foo.com |
+
+Response Example
+
+```
+{
+    "success": true,
+    "userData": {
+        "_id": "some uuid",
+        "name": "John Doe"
+        "email": "example@berkeley.edu"
+        "password": "password"
+        "serviceTime": 1
+        "driver": true
+        "location": 5
+        "__v": 0
+    }
+}
+```

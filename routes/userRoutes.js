@@ -18,7 +18,18 @@ const User = require("../models/userModel");
 router.get("/:email", async (req, res) => {
   const email = req.params.email;
   console.log("request params: " + email);
-  const createRes = await userController.getUser(email);
+  const createRes = await userController.getUserByEmail(email);
+  return res.json(createRes);
+});
+
+// @route Get api/users/name
+// @query name
+// @desc Get user data
+// @access Public
+router.get("/", async (req, res) => {
+  const name = req.query.name;
+  console.log("request query: " + name);
+  const createRes = await userController.getUserByName(name);
   return res.json(createRes);
 });
 

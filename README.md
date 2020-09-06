@@ -72,7 +72,7 @@ Response Example
 }
 ```
 
-| API             | getUser                           |
+| API             | getUserByEmail                    |
 | --------------- | --------------------------------- |
 | Url             | `/api/users/:email`               |
 | Method          | Get                               |
@@ -87,7 +87,32 @@ Response Example
     "userData": {
         "_id": "some uuid",
         "name": "John Doe"
-        "email": "example@berkeley.edu"
+        "email": "example@foo.com"
+        "password": "password"
+        "serviceTime": 1
+        "driver": true
+        "location": 5
+        "__v": 0
+    }
+}
+```
+
+| API             | getUserByName                    |
+| --------------- | -------------------------------- |
+| Url             | `/api/users/`                    |
+| Method          | Get                              |
+| Query           | name                             |
+| Request Example | curl IP/api/users/?name=John Doe |
+
+Response Example
+
+```
+{
+    "success": true,
+    "userData": {
+        "_id": "some uuid",
+        "name": "John Doe"
+        "email": "example@foo.com"
         "password": "password"
         "serviceTime": 1
         "driver": true

@@ -25,7 +25,24 @@ module.exports = {
     return createRes;
   },
 
-  updateUser: async () => {},
+  updateUserLocation: async (userEmail, userLocation) => {
+    // find user and update location
+    const user = await User.findOneAndUpdate(
+      { email: userEmail },
+      { location: userLocation },
+      { useFindAndModify: false, returnOriginal: false }
+    );
+    // if successful, create response
+    if (user) {
+      return { success: true, userData: user };
+    } else {
+      return { success: false, errmsg: "update not valid!" };
+    }
+  },
+
+  updateUserServiceTime: async (userEmail, userServiceTime) => {},
+
+  updateUserDriver: async (userEmail, userDriver) => {},
 
   deleteUser: async () => {},
 };

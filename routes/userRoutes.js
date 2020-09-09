@@ -33,6 +33,17 @@ router.get("/", async (req, res) => {
   return res.json(createRes);
 });
 
+// @route Put api/users/:email/:location
+// @desc update user data
+// @access Public
+router.put("/:email/:location", async (req, res) => {
+  const email = req.params.email;
+  const location = req.params.location;
+  console.log("request params: " + email + ", " + location);
+  const createRes = await userController.updateUserLocation(email, location);
+  return res.json(createRes);
+});
+
 // @route POST api/users/register
 // @desc Register user
 // @access Public

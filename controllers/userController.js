@@ -40,9 +40,41 @@ module.exports = {
     }
   },
 
-  updateUserServiceTime: async (userEmail, userServiceTime) => {},
+  updateUserServiceTime: async (userEmail, userServiceTime) => {
+    const user = await User.findOneAndUpdate(
+      { email: userEmail },
+      { serviceTime: userServiceTime },
+      { useFindAndModify: false, returnOriginal: false }
+    );
+    // if successful, create response
+    if (user) {
+      return { success: true, userData: user };
+    } else {
+      return { success: false, errmsg: "update not valid!" };
+    }
+  },
 
-  updateUserDriver: async (userEmail, userDriver) => {},
+  updateUserDriver: async (userEmail, userDriver) => {
+    // find user and update location
+    const user = await User.findOneAndUpdate(
+      { email: userEmail },
+      { driver: userDriver },
+      { useFindAndModify: false, returnOriginal: false }
+    );
+    // if successful, create response
+    if (user) {
+      return { success: true, userData: user };
+    } else {
+      return { success: false, errmsg: "update not valid!" };
+    }
+  },
 
-  deleteUser: async () => {},
+  deleteUser: async (userEmail) => {
+    const user = await User.findOneAndDelete({ email: userEmail });
+    if (user) {
+      return { success: true };
+    } else {
+      return { success: false, errmsg: "delete not successful!" };
+    }
+  },
 };

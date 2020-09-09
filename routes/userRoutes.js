@@ -36,11 +36,46 @@ router.get("/", async (req, res) => {
 // @route Put api/users/:email/:location
 // @desc update user data
 // @access Public
-router.put("/:email/:location", async (req, res) => {
+router.put("/location/:email/:location", async (req, res) => {
   const email = req.params.email;
   const location = req.params.location;
   console.log("request params: " + email + ", " + location);
   const createRes = await userController.updateUserLocation(email, location);
+  return res.json(createRes);
+});
+
+// @route Put api/users/:email/:driver
+// @desc update user data
+// @access Public
+router.put("/driver/:email/:driver", async (req, res) => {
+  const email = req.params.email;
+  const driver = req.params.driver;
+  console.log("request params: " + email + ", " + driver);
+  const createRes = await userController.updateUserDriver(email, driver);
+  return res.json(createRes);
+});
+
+// @route Put api/users/:email/:serviceTime
+// @desc update user data
+// @access Public
+router.put("/serviceTime/:email/:serviceTime", async (req, res) => {
+  const email = req.params.email;
+  const serviceTime = req.params.serviceTime;
+  console.log("request params: " + email + ", " + serviceTime);
+  const createRes = await userController.updateUserServiceTime(
+    email,
+    serviceTime
+  );
+  return res.json(createRes);
+});
+
+// @route Delete api/users/:email
+// @desc update user data
+// @access Public
+router.delete("/:email", async (req, res) => {
+  const email = req.params.email;
+  console.log("request params: " + email);
+  const createRes = await userController.deleteUser(email);
   return res.json(createRes);
 });
 

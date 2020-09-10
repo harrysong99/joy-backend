@@ -71,3 +71,143 @@ Response Example
     "__v": 0
 }
 ```
+
+| API             | getUserByEmail                    |
+| --------------- | --------------------------------- |
+| Url             | `/api/users/:email`               |
+| Method          | Get                               |
+| Params          | email                             |
+| Request Example | curl IP/api/users/example@foo.com |
+
+Response Example
+
+```
+{
+    "success": true,
+    "userData": {
+        "_id": "some uuid",
+        "name": "John Doe"
+        "email": "example@foo.com"
+        "password": "password"
+        "serviceTime": 1
+        "driver": true
+        "location": 5
+        "__v": 0
+    }
+}
+```
+
+| API             | getUserByName                    |
+| --------------- | -------------------------------- |
+| Url             | `/api/users/`                    |
+| Method          | Get                              |
+| Query           | name                             |
+| Request Example | curl IP/api/users/?name=John Doe |
+
+Response Example
+
+```
+{
+    "success": true,
+    "userData": {
+        "_id": "some uuid",
+        "name": "John Doe"
+        "email": "example@foo.com"
+        "password": "password"
+        "serviceTime": 1
+        "driver": true
+        "location": 5
+        "__v": 0
+    }
+}
+```
+
+| API             | updateUserLocation                           |
+| --------------- | -------------------------------------------- |
+| Url             | `/api/users/location/:email/:location`       |
+| Method          | Put                                          |
+| Params          | email, location                              |
+| Request Example | curl IP/api/users/location/example@foo.com/4 |
+
+Response Example
+
+```
+{
+    "success": true,
+    "userData": {
+        "_id": "some uuid",
+        "name": "John Doe"
+        "email": "example@foo.com"
+        "password": "password"
+        "serviceTime": 1
+        "driver": true
+        "location": 4
+        "__v": 0
+    }
+}
+```
+
+| API             | updateUserDriver                                 |
+| --------------- | ------------------------------------------------ |
+| Url             | `/api/users/driver/:email/:driver`               |
+| Method          | Put                                              |
+| Params          | email, driver                                    |
+| Request Example | curl IP/api/users/location/example@foo.com/false |
+
+Response Example
+
+```
+{
+    "success": true,
+    "userData": {
+        "_id": "some uuid",
+        "name": "John Doe"
+        "email": "example@foo.com"
+        "password": "password"
+        "serviceTime": 1
+        "driver": false
+        "location": 4
+        "__v": 0
+    }
+}
+```
+
+| API             | updateUserServiceTime                        |
+| --------------- | -------------------------------------------- |
+| Url             | `/api/users/location/:email/:serviceTime`    |
+| Method          | Put                                          |
+| Params          | email, serviceTime                           |
+| Request Example | curl IP/api/users/location/example@foo.com/2 |
+
+Response Example
+
+```
+{
+    "success": true,
+    "userData": {
+        "_id": "some uuid",
+        "name": "John Doe"
+        "email": "example@foo.com"
+        "password": "password"
+        "serviceTime": 2
+        "driver": true
+        "location": 4
+        "__v": 0
+    }
+}
+```
+
+| API             | deleteUser                        |
+| --------------- | --------------------------------- |
+| Url             | `/api/users/:email`               |
+| Method          | Delete                            |
+| Params          | email                             |
+| Request Example | curl IP/api/users/example@foo.com |
+
+Response Example
+
+```
+{
+    "success": true,
+}
+```

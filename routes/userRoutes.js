@@ -7,13 +7,77 @@ const keys = require("../config/keys");
 // load input validation
 const validateRegisterInput = require("../controllers/register");
 const validateLoginInput = require("../controllers/login");
+// load user functionalities
+const userController = require("../controllers/userController");
 // load user model
 const User = require("../models/userModel");
 
-// pull the erros and isValid variables from our validateRegisterInput(req.body) function and check input validation
-// if valid input, use MongoDB's User.findOne() to see if the user already exists
-// if user is a new user, fill in the fields (name, email, password, serviceTime, driver, location) with data sent in the body of the request
-// use bcrypt.js to hash the password before storing it in your database
+// @route Get api/users/:email
+// @desc Get user data
+// @access Public
+router.get("/:email", async (req, res) => {
+  const email = req.params.email;
+  console.log("request params: " + email);
+  const createRes = await userController.getUserByEmail(email);
+  return res.json(createRes);
+});
+
+// @route Get api/users/name
+// @query name
+// @desc Get user data
+// @access Public
+router.get("/", async (req, res) => {
+  const name = req.query.name;
+  console.log("request query: " + name);
+  const createRes = await userController.getUserByName(name);
+  return res.json(createRes);
+});
+
+// @route Put api/users/:email/:location
+// @desc update user data
+// @access Public
+router.put("/location/:email/:location", async (req, res) => {
+  const email = req.params.email;
+  const location = req.params.location;
+  console.log("request params: " + email + ", " + location);
+  const createRes = await userController.updateUserLocation(email, location);
+  return res.json(createRes);
+});
+
+// @route Put api/users/:email/:driver
+// @desc update user data
+// @access Public
+router.put("/driver/:email/:driver", async (req, res) => {
+  const email = req.params.email;
+  const driver = req.params.driver;
+  console.log("request params: " + email + ", " + driver);
+  const createRes = await userController.updateUserDriver(email, driver);
+  return res.json(createRes);
+});
+
+// @route Put api/users/:email/:serviceTime
+// @desc update user data
+// @access Public
+router.put("/serviceTime/:email/:serviceTime", async (req, res) => {
+  const email = req.params.email;
+  const serviceTime = req.params.serviceTime;
+  console.log("request params: " + email + ", " + serviceTime);
+  const createRes = await userController.updateUserServiceTime(
+    email,
+    serviceTime
+  );
+  return res.json(createRes);
+});
+
+// @route Delete api/users/:email
+// @desc update user data
+// @access Public
+router.delete("/:email", async (req, res) => {
+  const email = req.params.email;
+  console.log("request params: " + email);
+  const createRes = await userController.deleteUser(email);
+  return res.json(createRes);
+});
 
 // @route POST api/users/register
 // @desc Register user
@@ -52,13 +116,6 @@ router.post("/register", (req, res) => {
     }
   });
 });
-
-// pull the errors and isValid variables from our validateLoginInput(req.body) function and check input validation
-// if valid input, use MongoDB's user.findOne() to see if the user exists
-// if user exists, use bcrypt.js to compare submitted password with hashed password in our database
-// if passwords match, create our JWT Payload
-// sign out jwt, including our payload, keys.secretOrKey from keys.js, and setting a expiresIn time(in seconds)
-// if successful, append the token to a Bearer string
 
 // @route POST api/users/login
 // @desc Login user and return JWT token
